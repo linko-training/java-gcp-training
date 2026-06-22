@@ -1,0 +1,36 @@
+steps:
+  # 1. Compilar el JAR y construir la imagen Docker optimizada usando tu Dockerfile
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/linko-training/reto1-repository/cloud-run-api:$SHORT_SHA',
+      '.'
+    ]
+
+  # 2. Subir la imagen empaquetada al Artifact Registry de Linko
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/linko-training/reto1-repository/cloud-run-api:$SHORT_SHA'
+    ]
+
+  # 3. Desplegar de forma automática a Cloud Run con Gobernanza y límites de producción
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'cloud-run-api-ivan' # Dale tu toque al nombre del servicio para identificarlo
+      - '--image=us-central1-docker.pkg.dev/linko-training/reto1-repository/cloud-run-api:$SHORT_SHA'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated' # Permite que puedas probarlo desde Postman sin tokens de GCP
+      - '--service-account=reto1-runtime@linko-training.iam.gserviceaccount.com' # La SA que te dieron
+      # Límites de Recursos (Gobernanza / Producción listo)
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--max-instances=3'
+      - '--concurrency=80'
+
+images:
+  - 'us-central1-docker.pkg.dev/linko-training/reto1-repository/cloud-run-api:$SHORT_SHA'
