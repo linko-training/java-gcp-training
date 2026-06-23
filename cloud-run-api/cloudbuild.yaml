@@ -4,7 +4,7 @@ steps:
     args: [
       'build',
       '-t', 'us-central1-docker.pkg.dev/linko-training/linko-java-repo/$_SERVICE_NAME:$SHORT_SHA',
-      '.'
+      './cloud-run-api'
     ]
 
   # 2. Subir la imagen empaquetada al repositorio compartido
