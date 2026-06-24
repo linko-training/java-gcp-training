@@ -33,6 +33,7 @@ steps:
       - '--cpu=1'
       - '--max-instances=3'
       - '--concurrency=80'
+      - '--service-account=reto1-runtime@linko-training.iam.gserviceaccount.com'
 
 images:
   - 'us-central1-docker.pkg.dev/linko-training/linko-java-repo/$_SERVICE_NAME:$SHORT_SHA'
