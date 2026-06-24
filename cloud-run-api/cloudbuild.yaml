@@ -34,6 +34,19 @@ steps:
       - '--max-instances=3'
       - '--concurrency=80'
       - '--service-account=reto1-runtime@linko-training.iam.gserviceaccount.com'
+      -
+  # 🔑 4. EXTRAER TOKEN DE IDENTIDAD PARA PRUEBAS EN POSTMAN
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "===================================================="
+        echo "COPIA EL SIGUIENTE TOKEN PARA POSTMAN:"
+        echo ""
+        gcloud auth print-identity-token --impersonate-service-account=reto1-runtime@linko-training.iam.gserviceaccount.com --audiences="https://linko-java-api-sr-430799291004.us-central1.run.app"
+        echo ""
+        echo "===================================================="
 
 images:
   - 'us-central1-docker.pkg.dev/linko-training/linko-java-repo/$_SERVICE_NAME:$SHORT_SHA'
