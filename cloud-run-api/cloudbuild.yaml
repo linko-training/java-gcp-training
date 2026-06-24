@@ -33,7 +33,7 @@ steps:
       - '--cpu=1'
       - '--max-instances=3'
       - '--concurrency=80'
-      -
+
   # 🔑 4. EXTRAER TOKEN DE IDENTIDAD PARA PRUEBAS EN POSTMAN
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
