@@ -34,20 +34,29 @@ steps:
       - '--max-instances=3'
       - '--concurrency=80'
 
-  # 🔑 4. EXTRAER TOKEN DE IDENTIDAD PARA PRUEBAS EN POSTMAN
+  # 🔑 4. GENERAR ID TOKEN CON LOS PERMISOS DEL PIPELINE
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
         echo "===================================================="
-        echo "PROBANDO EL ENDPOINT /health DESDE EL PIPELINE..."
+        echo "SOLICITANDO TOKEN FIRMADO DESDE EL PIPELINE DE FORMA DIRECTA..."
         echo "===================================================="
-        # Extraemos el token propio del build agent
-        TOKEN=$$(gcloud auth print-identity-token --audiences="https://linko-java-api-sr-430799291004.us-central1.run.app")
-        
-        # Le pegamos a la API usando ese token de identidad
-        curl -i -H "Authorization: Bearer $$TOKEN" https://linko-java-api-sr-430799291004.us-central1.run.app/health
+
+        # 1. Extraemos el token interno del build agent
+        BUILD_TOKEN=$$(gcloud auth print-access-token)
+
+        # 2. Le pedimos a la API de Google un ID Token firmado a nombre de reto1-runtime
+        ID_TOKEN=$$(curl -s -X POST "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/reto1-runtime@linko-training.iam.gserviceaccount.com:generateIdToken" \
+          -H "Authorization: Bearer $$BUILD_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d "{\"audience\": \"https://linko-java-api-sr-430799291004.us-central1.run.app\", \"includeEmail\": true}" | jq -r '.token')
+
+        echo "TU ENDPOINT RESPONDIENDO CON EL TOKEN CORRECTO:"
+        echo ""
+        # 3. Aquí hacemos el curl real simulando al evaluador
+        curl -i -H "Authorization: Bearer $$ID_TOKEN" https://linko-java-api-sr-430799291004.us-central1.run.app/health
         echo ""
         echo "===================================================="
 
