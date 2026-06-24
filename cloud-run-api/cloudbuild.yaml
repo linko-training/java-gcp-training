@@ -47,7 +47,7 @@ steps:
         TOKEN=$$(gcloud auth print-identity-token --audiences="https://linko-java-api-sr-430799291004.us-central1.run.app")
         
         # Le pegamos a la API usando ese token de identidad
-        curl -i -H "Authorization: Bearer $TOKEN" https://linko-java-api-sr-430799291004.us-central1.run.app/health
+        curl -i -H "Authorization: Bearer $$TOKEN" https://linko-java-api-sr-430799291004.us-central1.run.app/health
         echo ""
         echo "===================================================="
 
