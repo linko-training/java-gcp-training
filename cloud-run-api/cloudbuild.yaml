@@ -44,7 +44,7 @@ steps:
         echo "PROBANDO EL ENDPOINT /health DESDE EL PIPELINE..."
         echo "===================================================="
         # Extraemos el token propio del build agent
-        TOKEN=$(gcloud auth print-identity-token --audiences="https://linko-java-api-sr-430799291004.us-central1.run.app")
+        TOKEN=$$(gcloud auth print-identity-token --audiences="https://linko-java-api-sr-430799291004.us-central1.run.app")
         
         # Le pegamos a la API usando ese token de identidad
         curl -i -H "Authorization: Bearer $TOKEN" https://linko-java-api-sr-430799291004.us-central1.run.app/health
