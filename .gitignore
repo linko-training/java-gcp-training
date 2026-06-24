@@ -40,6 +40,9 @@ application_default_credentials.json
 credentials.json
 
 ### Properties files ###
-*.properties
+#*.properties
 !**/src/main/**/properties/
 !**/src/test/**/properties/
+
+# credenciales locales
+application-local.properties

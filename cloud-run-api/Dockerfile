@@ -19,7 +19,7 @@ RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
 # Copiar el Jar compilado desde la etapa anterior
-COPY --from=build /app/target/cloud-run-api-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/cloud-run-api/target/cloud-run-api-0.0.1-SNAPSHOT.jar app.jar
 
 # Cloud Run inyecta automáticamente la variable de entorno $PORT (suele ser 8080)
 EXPOSE 8080
